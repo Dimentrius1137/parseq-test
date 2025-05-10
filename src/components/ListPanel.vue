@@ -5,12 +5,20 @@
 	>
 		<div class="edit-panel__header">
 			<p>Список {{ selectedList.name }}</p>
-			<div>Мутации: </div>
 			<BaseButton
 				btn-text="Удалить"
 				@click="removeList"
 			/>
+			<BaseButton
+				:btn-width="150"
+				btn-text="Добавить мутацию"
+				@click="emit('updateList', true)"
+			/>
 			<input type="text">
+			<BaseButton
+				btn-text="Сохранить"
+			/>
+			<div>Мутации: </div>
 		</div>
 		
 		<ul class="mutations-list">
@@ -26,7 +34,7 @@
 </template>
 <script setup lang="ts">
     import { PropType } from 'vue';
-    import { ListType } from '@/utils/types.ts'
+    import { ListType } from '@/utils/types/types'
     import api from '@/api/instance';
     import BaseButton from '@/components/shared/BaseButton.vue';
 
@@ -37,7 +45,7 @@
         }
     })
     const emit = defineEmits(['removeList', 'updateList']);
-
+    
     async function removeList(){
         await api.delete(`lists/${props.selectedList?.name}`);
         emit('removeList');

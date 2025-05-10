@@ -45,8 +45,12 @@
 			<ListPanel
 				:selected-list="selectedList"
 				@remove-list="getLists(); selectedList = null"
+				@update-list="isTableOpen = $event"
 			/>
 		</div>
+		<Teleport to="body">
+			<MutationsTable v-if="isTableOpen" />
+		</Teleport>
 	</div>
 </template>
 
@@ -54,21 +58,27 @@
 import { ref, computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import api from '@/api/instance';
-import { ListType } from '@/utils/types'
+import { ListType } from '@/utils/types/types'
 import ListPanel from '@/components/ListPanel.vue';
+import MutationsTable from '@/components/MutationsTable.vue';
 
 const selectedList = ref<ListType | null>(null);
 const searchValue = ref<string>('');
 const lists = ref<ListType[]>([]);
-const emptyList = ref<string>('Пусто');
+const emptyList = ref<string>('Загрузка списков');
+const isTableOpen = ref<boolean>(false);
 
 async function getLists(){
     try{
         const listsData = await api.get('/lists');
+        if(listsData.data.length === 0){
+            emptyList.value = 'Пусто'
+        }
         lists.value = listsData.data;
     }
-    catch{
-        emptyList.value = 'Не удалось загрузить списки'
+    catch(e){
+        emptyList.value = 'Не удалось загрузить списки';
+        console.log(e)
     }
 }
 getLists();
@@ -133,7 +143,7 @@ const currentLists = computed(() =>{
 		padding-right: 0;
 		margin-bottom: 1rem;
 	}
-
+	
 	.lists{
 		width: 100%;
 		height: 100%;
