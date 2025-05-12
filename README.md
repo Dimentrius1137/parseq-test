@@ -1,5 +1,5 @@
 Для запуска проекта в локальном реиме: npm run dev
-&nbsp;
+<p/>
 Для сборки: npm run build (просмотр: npm run preview)
-&nbsp;
+<p/>
 Линтинг: npm run lint
