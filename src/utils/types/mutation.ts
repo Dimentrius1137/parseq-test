@@ -1,9 +1,5 @@
-export type ListType = { 
-        name: string, 
-        mutations?: string[]
-    };
-
 export type MutationType = {
+    isAdded: boolean
     mutationId: string
     mutationType: string
     maybeHgvsGdna: string

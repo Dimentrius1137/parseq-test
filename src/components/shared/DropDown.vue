@@ -1,5 +1,6 @@
 <template>
 	<div
+		ref="dropdown"
 		class="dropdown"
 		:style="{ width: `${itemWidth ?? 100}px`}"
 	>
@@ -7,13 +8,20 @@
 			class="selected-option"
 			@click="isOpen = !isOpen"
 		>
-			{{ selectedOption ?? '-' }}
+			{{ selectedOptionFromList }}
 		</p>
-		<Transition>
+		<Transition :name="(direction == 'top') ? 'top': 'bottom'">
 			<ul
 				v-if="isOpen"
 				:class="['option-list', { 'view-top': direction == 'top'}]"
 			>
+				<li
+					v-if="defaultValue"
+					class="option-list__item"
+					@click="selectOption('')"
+				>
+					{{ defaultValue }}
+				</li>
 				<li
 					v-for="option in options"
 					:key="option"
@@ -27,12 +35,14 @@
 	</div>
 </template>
 <script setup lang="ts">
-    import { ref } from 'vue';
-
+    import { ref, computed } from 'vue';
+    import { onClickOutside } from '@vueuse/core'
+    import { useTemplateRef } from 'vue'
     interface Props {
 		options: (number | string)[];
+        defaultValue?: (number | string);
 		direction?: 'top';
-		itemWidth?: number 
+		itemWidth?: number;
     }
     type optionType = string | number | null;
 
@@ -49,7 +59,15 @@
         emit('selectOption', option);
     }
 
-   
+    const selectedOptionFromList = computed(() => {
+        if(selectedOption.value){
+            return selectedOption.value;
+        }
+        return '-'
+    })
+    
+    const dropdown = useTemplateRef<HTMLElement>('dropdown');
+    onClickOutside(dropdown, () => isOpen.value = false);
 </script>
 <style scoped>
     .dropdown{
@@ -83,4 +101,25 @@
         text-align: center;
         align-content: center;
     }
+
+    .top-enter-active,
+	.top-leave-active {
+	transition: all 0.2s ease;
+	}
+
+	.top-enter-from,
+	.top-leave-to {
+		transform: translateY(20%);
+		opacity: 0;
+	}
+    .bottom-enter-active,
+	.bottom-leave-active {
+	transition: all 0.2s ease;
+	}
+
+	.bottom-enter-from,
+	.bottom-leave-to {
+		transform: translateY(-20%);
+		opacity: 0;
+	}
 </style>

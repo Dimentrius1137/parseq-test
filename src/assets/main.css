@@ -12,11 +12,12 @@
 	box-sizing: border-box;
 }
 
+body{
+	background-color: var(--white);
+}
 :root{
 	--yellow: #ffde23;
 	--white: #e9eaed;
-	--gray: #aaaaaa;
-	--dark-gray: #8e8e92;
 	--black: #252422;
 
 }

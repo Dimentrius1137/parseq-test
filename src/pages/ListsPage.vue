@@ -42,14 +42,26 @@
 					{{ emptyList }}
 				</p>
 			</div>
-			<ListPanel
-				:selected-list="selectedList"
-				@remove-list="getLists(); selectedList = null"
-				@update-list="isTableOpen = $event"
-			/>
+			<Transition>
+				<ListPanel
+					v-if="selectedList"
+					:selected-list="selectedList"
+					@remove-list="getLists(); selectedList = null"
+					@add-mutations="getLists(); isTableOpen = $event"
+					@list-saved="getLists(); selectedList = null"
+				/>
+			</Transition>
 		</div>
 		<Teleport to="body">
-			<MutationsTable v-if="isTableOpen" />
+			<KeepAlive>
+				<MutationsTable
+					v-if="isTableOpen"
+					:is-popup="true"
+					:has-mutations="selectedList?.mutations"
+					@add-mutations="getAddedLists($event, selectedList as ListType); isTableOpen = false"
+					@close="isTableOpen = false"
+				/>
+			</KeepAlive>
 		</Teleport>
 	</div>
 </template>
@@ -58,7 +70,8 @@
 import { ref, computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import api from '@/api/instance';
-import { ListType } from '@/utils/types/types'
+import { ListType } from '@/utils/types/list'
+import { getAddedLists } from '@/utils/composables/getAddedMutations';
 import ListPanel from '@/components/ListPanel.vue';
 import MutationsTable from '@/components/MutationsTable.vue';
 
@@ -133,6 +146,7 @@ const currentLists = computed(() =>{
 		display: flex;
 		gap: 2rem;
 		overflow: hidden;
+
 	}
 
 	.lists-panel{
@@ -169,5 +183,16 @@ const currentLists = computed(() =>{
 			transform: scaleX(1);
 		}
 	}
+	}
+
+	.v-enter-active,
+	.v-leave-active {
+	transition: all 0.5s ease;
+	}
+
+	.v-enter-from,
+	.v-leave-to {
+		transform: translateX(100%);
+		opacity: 0;
 	}
   </style>
