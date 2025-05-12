@@ -1,6 +1,13 @@
 <template>
 	<div class="page">
-		<h1>Новый список</h1>
+		<div class="page__header">
+			<h1 class="page__title">
+				Списки
+			</h1>
+			<RouterLink :to="{name: 'lists'}">
+				Списки ->
+			</RouterLink>
+		</div>
 		<div class="mutations-panel">
 			<form
 				class="new-list"
@@ -68,7 +75,13 @@
 		height: 100vh;
 		display: flex;
 		flex-direction: column;
-		gap: 1rem
+		gap: 1rem;
+
+		&__header{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
 	}
 	.mutations-panel{
 			display: flex;
