@@ -1,35 +1,23 @@
-@import './base.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
+@font-face {
+	font-family: 'PT_Sans-Web-Regular';
+	src: url('@/assets/fonts/PT_Sans-Web-Regular.ttf')
   }
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+*{
+	margin: 0;
+	padding: 0;
+	font-family: 'PT_Sans-Web-Regular' !important;
+	color: var(--black);
+	box-sizing: border-box;
+}
+
+body{
+	background-color: var(--white);
+}
+:root{
+	--yellow: #ffde23;
+	--white: #e9eaed;
+	--black: #252422;
+
 }
